@@ -343,6 +343,9 @@ applyRenames ident = case identToString ident of
     "proc" -> "proc_"
     "type" -> "type_"
     "where" -> "where_"
+    "box" -> "box_"
+    "false" -> "false_"
+    "true" -> "true_"
     name -> name
 ```
 
