@@ -45,7 +45,7 @@ if '-c' in cflags:
         ).stdout.splitlines()[0]
 
         if outfile is None:
-            outfile = str(PurePath(rsfile).with_suffix(".o"))
+            outfile = str(PurePath(rsfile.decode()).with_suffix(".o"))
 
         rustwarn = subprocess.run(
             ['rustc', '--crate-type=dylib', '--emit', 'obj', '-o', outfile, rsfile],
@@ -68,9 +68,9 @@ else:
 
     rustlibdir = sysroot + b'/lib/rustlib/x86_64-unknown-linux-gnu/lib/'
 
-    needed = [b'libcompiler-rt.a'] + [
+    needed = [
         b'lib' + lib + b'-*.rlib'
-        for lib in (b'core', b'std', b'collections', b'panic_unwind', b'rustc_unicode', b'unwind', b'rand', b'alloc', b'alloc_system', b'libc')
+        for lib in (b'core', b'compiler_builtins', b'std', b'collections', b'panic_unwind', b'std_unicode', b'unwind', b'rand', b'alloc', b'alloc_system', b'libc')
     ]
     alllibs = os.listdir(rustlibdir)
 
