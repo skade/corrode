@@ -3071,6 +3071,13 @@ whether it is not a null pointer.
     IsPtr _ _ -> Rust.Not (Rust.MethodCall v (Rust.VarName "is_null") [])
 ```
 
+It may be an enum, in which case we can interpret it as numeric and
+compare it to 0.
+
+```haskell
+    IsEnum _ -> Rust.CmpNE (Rust.Cast v (Rust.TypeName "u32")) 0
+```
+
 Otherwise, it should be numeric and we just need to test that it is not
 equal to 0.
 
