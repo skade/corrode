@@ -3744,8 +3744,10 @@ above.
             let attrs = [ Rust.Attribute "derive(Clone, Copy)"
                         , Rust.Attribute (concat [ "repr(", repr, ")" ])
                         ]
+            let impl = Rust.Item
             when shouldEmit $
-                emitItems [Rust.Item attrs Rust.Public (Rust.Enum name enums)]
+                emitItems [Rust.Item attrs Rust.Public (Rust.Enum name enums),
+                           Rust.Item [] Rust.Private (Rust.PartialEqImpl (Rust.TypeName name) (Rust.TypeName repr))]
             return (IsEnum name)
 
         forM_ items $ \ (ident, _mexpr) -> addSymbolIdentAction ident $ do

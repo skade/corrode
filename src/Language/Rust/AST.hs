@@ -129,6 +129,7 @@ data ItemKind
     | Use String
     | Enum String [Enumerator]
     | CloneImpl Type -- TODO: generalize `impl` syntax
+    | PartialEqImpl Type Type
     deriving Show
 
 instance Pretty ItemKind where
@@ -166,6 +167,18 @@ instance Pretty ItemKind where
                 , text "Self"
                 , text "{"
                 , nest 4 (text "*self")
+                , text "}"
+                ]) $+$
+            text "}"
+    pPrint (PartialEqImpl ty oty) =
+        hsep [text "impl", text "PartialEq<", pPrint oty, text ">", text "for", pPrint ty] <+> text "{" $+$
+            nest 4 (hsep
+                [ text "fn"
+                , text "eq" <> parens (text "&self, other: &" <> pPrint oty)
+                , text "->"
+                , text "bool"
+                , text "{"
+                , nest 4 (text "*self as " <> pPrint ty <> text "== *other")
                 , text "}"
                 ]) $+$
             text "}"
